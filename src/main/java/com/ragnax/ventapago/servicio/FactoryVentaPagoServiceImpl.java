@@ -419,30 +419,22 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 		VentaPago ventaPago = new VentaPago();
 		try {
 
-//			Optional<MedioPago> optPerMedioPago = factoryVentaPagoDAO.getMedioPagoRepository().findById(id);
-//
-//			if(optPerMedioPago!=null && optPerMedioPago.isPresent()){
+			Pageable pageByCodigoDesc = PageRequest.of(0, 1, Sort.by("codigoMedioPago").descending());
 
-				Pageable pageByCodigoDesc = PageRequest.of(0, 1, Sort.by("codigoMedioPago").descending());
+			Page<MedioPago> pageCodigoMedioPago  = factoryVentaPagoDAO.getMedioPagoRepository().findByCodigoMedioPago(codigoMedioPago, pageByCodigoDesc);
 
-				Page<MedioPago> pageCodigoMedioPago  = factoryVentaPagoDAO.getMedioPagoRepository().findByCodigoMedioPago(codigoMedioPago, pageByCodigoDesc);
-
-				/***Busqueda por nombre existe en un tipoNegocio No existe. o solo existe en el pageNombreMedioPago.idMedioPago = id 
+			/***Busqueda por nombre existe en un tipoNegocio No existe. o solo existe en el pageNombreMedioPago.idMedioPago = id 
 				//... solo actualizar estado****/
-				if(!pageCodigoMedioPago.isEmpty()){
-//					objMedioPago.setIdMedioPago(id);
+			if(!pageCodigoMedioPago.isEmpty()){
 
-					factoryVentaPagoDAO.getMedioPagoRepository().save(objMedioPago);
+				factoryVentaPagoDAO.getMedioPagoRepository().save(objMedioPago);
 
-					ventaPago.setMedioPago(objMedioPago);
-				}
-				else {
-					throw new LogicaImplException("No se puede actualizar MedioPago, codigoMedioPago ya existe en un identificador distinto");
-				}
+				ventaPago.setMedioPago(objMedioPago);
+			}
+			else {
+				throw new LogicaImplException("No se puede actualizar MedioPago, codigoMedioPago ya existe en un identificador distinto");
+			}
 
-//			}else {
-//				throw new LogicaImplException("No se puede actualizar MedioPago, identificador no existe");
-//			}
 		} catch (Exception e) {
 			throw new LogicaImplException(e.getMessage());
 		}
@@ -502,41 +494,31 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 	/***** Negocio Negocio Negocio **************/
 	/**Primero generar el codigo de negocio y luego crear negocio**/
 	public VentaPago generarCodigoNegocio(Negocio objNegocio) throws LogicaImplException {
-		
-		VentaPago ventaPago = new VentaPago();
-		
-		try {
-			if(!objNegocio.getIdUsuarioContactoEmailContacto().equals("") && !objNegocio.getValue_64_negocio_producto().equals("")){
-				if(buscarCanalPago(objNegocio.getIdCanalPago()).getCanalPago().getIdCanalPago() > 0){
-					if(objNegocio.getIdPaisPortal()>0 && objNegocio.getIdTipoNegocio()>0){
 
-						String codigoNegocio = UtilidadesVentaPago.obtenerCodigoNegocio(objNegocio);
-						
-						/**Buscar si el codigo existe*/
-						Pageable pageByCodigoDesc = PageRequest.of(0, 1, Sort.by("codigoNegocio").descending());
-						/*****Buscar el ProductoFeeComision por codigo *****/
-						Page<Negocio> pageCodigoProducto  = factoryVentaPagoDAO.getNegocioRepository().findByCodigoNegocio(codigoNegocio, pageByCodigoDesc);
-						
-						if(pageCodigoProducto.isEmpty()) {
-							
-							objNegocio.setCodigoNegocio(codigoNegocio);
-							
-							ventaPago.setNegocio(objNegocio);
-						}
-					}else {
-						throw new LogicaImplException("No se puede crear codigo de negocio, datos de negocio invalidos");
-					}
-				}else {
-					throw new LogicaImplException("No se puede crear codigo de negocio, datos de validacion erroneos");
-				}
-			}else {
-				throw new LogicaImplException("No se puede crear codigo de negocio, parametros invalidos");
+		VentaPago ventaPago = new VentaPago();
+
+		try {
+
+			buscarCanalPago(objNegocio.getIdCanalPago()).getCanalPago().getIdCanalPago();
+
+			String codigoNegocio = UtilidadesVentaPago.obtenerCodigoNegocio(objNegocio);
+
+			/**Buscar si el codigo existe*/
+			Pageable pageByCodigoDesc = PageRequest.of(0, 1, Sort.by("codigoNegocio").descending());
+			/*****Buscar el ProductoFeeComision por codigo *****/
+			Page<Negocio> pageCodigoProducto  = factoryVentaPagoDAO.getNegocioRepository().findByCodigoNegocio(codigoNegocio, pageByCodigoDesc);
+
+			if(pageCodigoProducto.isEmpty()) {
+
+				objNegocio.setCodigoNegocio(codigoNegocio);
+
+				ventaPago.setNegocio(objNegocio);
 			}
 
 		} catch (Exception e) {
 			throw new LogicaImplException(e.getMessage());
 		}
-		
+
 		return ventaPago;
 	}
 
@@ -637,7 +619,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 		return ventaPago;
 	}
 
-	public VentaPago listarNegocioxPaisPortalEntreFechas(Integer idPaisPortal, String sFechaInicial, String sFechaFinal)  throws LogicaImplException {
+	public VentaPago listarNegocioxPaisPortalEntreFechas(String codigoPaisPortal, String sFechaInicial, String sFechaFinal)  throws LogicaImplException {
 		
 		VentaPago ventaPago = new VentaPago();
 
@@ -647,7 +629,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 			Timestamp tsFinal = DateMapper.mapperSimplyDateFormatYYYY_MM_DDTHH_MM_SSZToTimeStamp(sFechaFinal);
 			
 			List<Negocio> repListaNegocio = factoryVentaPagoDAO.getNegocioRepository().
-					findAllByIdPaisPortalAndFechaNegocioBetween(idPaisPortal, tsInicial, tsFinal);
+					findAllByIdPaisPortalAndFechaNegocioBetween(codigoPaisPortal, tsInicial, tsFinal);
 
 			if(repListaNegocio!=null && !repListaNegocio.isEmpty()){
 				ventaPago.setListaNegocio(repListaNegocio);
@@ -681,7 +663,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 			//validar  Que existe el id de Negocio;
 			buscarNegocioxCodigo(objStatusNegocio.getIdNegocio());
 			/**Buscar si existe statusNegocio asociado idNegocio*/
-			Pageable pageByCodigoDesc = PageRequest.of(0, 1, Sort.by("idStatusNegocio").descending());
+			Pageable pageByCodigoDesc = PageRequest.of(0, 1, Sort.by("idNegocio").descending());
 
 			Page<StatusNegocio> pageStatusNegocio  = factoryVentaPagoDAO.getStatusNegocioRepository().findByIdNegocio(objStatusNegocio.getIdNegocio(), pageByCodigoDesc);
 			//IdTipoStatusNegocio()==3 es el maximo disponible para el flujo
@@ -695,9 +677,9 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 				Integer idStatusNegocio = (!pageIdStatusNegocio.isEmpty()) ? (Integer) pageIdStatusNegocio.getContent().get(0).getIdStatusNegocio() + 1 : 1;
 				
 				//Si existe status service aumentar en uno el contador.
-
-				Integer idTipoStatusNegocio = (pageStatusNegocio.isEmpty() && pageStatusNegocio.getContent().get(0).getIdTipoStatusNegocio().getIdTipoStatusNegocio()<3) 
-						? (Integer) pageIdStatusNegocio.getContent().get(0).getIdStatusNegocio() + 1 : 1;
+				
+				Integer idTipoStatusNegocio = (!pageStatusNegocio.isEmpty() && pageIdStatusNegocio.getContent().get(0).getIdTipoStatusNegocio().getIdTipoStatusNegocio()<3) 
+						? (Integer) pageIdStatusNegocio.getContent().get(0).getIdTipoStatusNegocio().getIdTipoStatusNegocio() + 1 : 1;
 
 				objStatusNegocio.setIdStatusNegocio(idStatusNegocio);
 
@@ -855,6 +837,8 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 
 				String ahoraYYYY_MM_ddTHH_MM_SSZ = AppDate.obtenerFechaEnFormato(new Date(), TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
 
+				objPago.setIdPago(objPago.getIdPago());
+				
 				objPago.setFechaPagoFinalizado(DateMapper.mapperSimplyDateFormatYYYY_MM_DDTHH_MM_SSZToTimeStamp(ahoraYYYY_MM_ddTHH_MM_SSZ));
 
 				factoryVentaPagoDAO.getPagoRepository().save(objPago);
@@ -992,13 +976,13 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 		return ventaPago;
 	}
 
-	public VentaPago listarPagoEntreFecha(Integer idPaisPortal, String sFechaInicial, String sFechaFinal) throws LogicaImplException {
+	public VentaPago listarPagoEntreFecha(String codigoPaisPortal, String sFechaInicial, String sFechaFinal) throws LogicaImplException {
 
 		VentaPago ventaPago = new VentaPago();
 
 		try {
 
-			List<Negocio> listarNegocioxPaisPortalEntreFechas = listarNegocioxPaisPortalEntreFechas(idPaisPortal, sFechaInicial, sFechaFinal).getListaNegocio();
+			List<Negocio> listarNegocioxPaisPortalEntreFechas = listarNegocioxPaisPortalEntreFechas(codigoPaisPortal, sFechaInicial, sFechaFinal).getListaNegocio();
 
 			List<Pago> listaPago = factoryVentaPagoDAO.getPagoRepository().findByIdNegocioIn(listarNegocioxPaisPortalEntreFechas);
 
@@ -1208,7 +1192,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 
 			/***Busqueda por nombre existe en un tipoNegocio No existe. o solo existe en el pageNombreTipoNegocio.idTipoNegocio = id 
 				//... solo actualizar estado****/
-			if(!pageCodigoDetallePago.isEmpty() && pageCodigoDetallePago.getContent().get(0).getIdPago().getIdNegocio().getCodigoNegocio().equals("")){
+			if(!pageCodigoDetallePago.isEmpty() && !pageCodigoDetallePago.getContent().get(0).getIdPago().getIdNegocio().getCodigoNegocio().equals("")){
 
 				ventaPago.setDetallePago(pageCodigoDetallePago.getContent().get(0));
 			}

@@ -149,17 +149,17 @@ public class CrearDataVentaPagoTests {
 
 		try {
 
-			Negocio negocioA = new Negocio(1, true, false, "1", 1, 1, "key del producto almacenado en la base de datos", new CanalPago(1));
+			Negocio negocioA = new Negocio(1, true, false, "1", 1, "cl", "key del producto almacenado en la base de datos", new CanalPago(1));
 
-			Negocio negocioB = new Negocio(1, true, false, "1", 2, 2, "key del producto almacenado en la base de datos", new CanalPago(4));
+			Negocio negocioB = new Negocio(1, true, false, "1", 2, "cl", "key del producto almacenado en la base de datos", new CanalPago(4));
 
-			Negocio negocioC = new Negocio(1, true, false, "1", 3, 3, "key del producto almacenado en la base de datos", new CanalPago(3));
+			Negocio negocioC = new Negocio(1, true, false, "1", 3, "cl", "key del producto almacenado en la base de datos", new CanalPago(3));
 
-			Negocio negocioD = new Negocio(1, true, false, "1", 1, 4, "key del producto almacenado en la base de datos", new CanalPago(2));
+			Negocio negocioD = new Negocio(1, true, false, "1", 1, "cl", "key del producto almacenado en la base de datos", new CanalPago(2));
 
-			Negocio negocioE = new Negocio(1, true, false, "1", 2, 5, "key del producto almacenado en la base de datos", new CanalPago(1));
+			Negocio negocioE = new Negocio(1, true, false, "1", 2, "cl", "key del producto almacenado en la base de datos", new CanalPago(1));
 
-			negocioA = factoryVentaPagoService.generarCodigoNegocio(negocioE).getNegocio();
+			negocioA = factoryVentaPagoService.generarCodigoNegocio(negocioA).getNegocio();
 
 			negocioB = factoryVentaPagoService.generarCodigoNegocio(negocioB).getNegocio();
 
@@ -188,7 +188,7 @@ public class CrearDataVentaPagoTests {
 			String sfechaInicial = AppDate.obtenerFechaEnFormato(fechaInicial, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
 			String sfechaFinal = AppDate.obtenerFechaEnFormato(fechaFinal, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
 
-			listaNegocio = factoryVentaPagoService.listarNegocioxPaisPortalEntreFechas(1, sfechaInicial, sfechaFinal).getListaNegocio();
+			listaNegocio = factoryVentaPagoService.listarNegocioxPaisPortalEntreFechas("cl", sfechaInicial, sfechaFinal).getListaNegocio();
 			System.out.println(listaNegocio);
 
 		}catch(Exception e) {
@@ -236,7 +236,7 @@ public class CrearDataVentaPagoTests {
 		String sfechaInicial = AppDate.obtenerFechaEnFormato(fechaInicial, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
 		String sfechaFinal = AppDate.obtenerFechaEnFormato(fechaFinal, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
 		
-		List<Pago> listaPago = factoryVentaPagoService.listarPagoEntreFecha(listaNegocio.get(0).getIdPaisPortal(), sfechaInicial, sfechaFinal).getListaPago();
+		List<Pago> listaPago = factoryVentaPagoService.listarPagoEntreFecha(listaNegocio.get(0).getCodigoPaisPortal(), sfechaInicial, sfechaFinal).getListaPago();
 		System.out.println(listaPago);
 
 	}catch(Exception e) {
@@ -400,21 +400,33 @@ public class CrearDataVentaPagoTests {
 
 			factoryVentaPagoService.crearStatusNegocio(statusNegocioD);
 			
-			statusNegocioA = new StatusNegocio(listaNegocio.get(0));
+			try {
+				statusNegocioA = new StatusNegocio(listaNegocio.get(0));
+				factoryVentaPagoService.crearStatusNegocio(statusNegocioA);
+			}catch(Exception e ) {
+				
+			}
 			
-			statusNegocioB = new StatusNegocio(listaNegocio.get(1));
+			try {
+				statusNegocioB = new StatusNegocio(listaNegocio.get(1));
+				factoryVentaPagoService.crearStatusNegocio(statusNegocioB);
+			}catch(Exception e ) {
+				
+			}
 			
-			statusNegocioC = new StatusNegocio(listaNegocio.get(2));
+			try {
+				statusNegocioC = new StatusNegocio(listaNegocio.get(2));
+				factoryVentaPagoService.crearStatusNegocio(statusNegocioC);
+			}catch(Exception e ) {
+				
+			}
 			
-			statusNegocioD = new StatusNegocio(listaNegocio.get(3));
-
-			factoryVentaPagoService.crearStatusNegocio(statusNegocioA);
-
-			factoryVentaPagoService.crearStatusNegocio(statusNegocioB);
-
-			factoryVentaPagoService.crearStatusNegocio(statusNegocioC);
-
-			factoryVentaPagoService.crearStatusNegocio(statusNegocioD);
+			try {
+				statusNegocioD = new StatusNegocio(listaNegocio.get(3));
+				factoryVentaPagoService.crearStatusNegocio(statusNegocioD);
+			}catch(Exception e ) {
+				
+			}
 			
 			statusNegocioA = new StatusNegocio(listaNegocio.get(0));
 			

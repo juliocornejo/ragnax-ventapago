@@ -2,6 +2,7 @@ package com.ragnax.ventapago.servicio.utilidades;
 
 import com.ragnax.ventapago.entidad.DetallePago;
 import com.ragnax.ventapago.entidad.Negocio;
+import com.ragnax.ventapago.exception.LogicaImplException;
 
 import vijnana.utilidades.component.utilidades.excriptar.Encriptar1_1;
 
@@ -11,20 +12,21 @@ public class UtilidadesVentaPago {
 
 		try {
 			if(objNegocio.getIdUsuarioContactoEmailContacto()!=null &&
-					objNegocio.getIdPaisPortal()>0 && objNegocio.getIdCanalPago().getIdCanalPago() >0 && objNegocio.getIdTipoNegocio() > 0) {
+					objNegocio.getCodigoPaisPortal()!=null && objNegocio.getIdCanalPago().getIdCanalPago() >0 && objNegocio.getIdTipoNegocio() > 0) {
 				//Validar que no exista la combinacion del, negocio, tipo de fee y el nombre de ese cargo.
 
 				String codigoNegocio = objNegocio.getIdUsuarioContactoEmailContacto()+
-						objNegocio.getIdPaisPortal()+
 						objNegocio.getIdCanalPago().getIdCanalPago()+
 						objNegocio.getIdTipoNegocio();
 				codigoNegocio = codigoNegocio.trim();
 				codigoNegocio = codigoNegocio.replace("\\s", "").replace(" ", "");
 				codigoNegocio = codigoNegocio.toLowerCase();
 				
-				codigoNegocio = Encriptar1_1.generarCodigoByNumero(codigoNegocio);
+				codigoNegocio = Encriptar1_1.generarCodigoByNumeroByEncodear(codigoNegocio, objNegocio.getCodigoPaisPortal());
 				
 				return codigoNegocio;
+			}else {
+				new LogicaImplException("No se puede obtenerCodigoNegocio");
 			}
 
 		} catch (Exception e) {

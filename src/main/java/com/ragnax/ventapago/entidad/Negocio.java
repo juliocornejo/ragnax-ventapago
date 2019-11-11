@@ -47,7 +47,7 @@ public class Negocio{
 	private Integer idTipoNegocio;
 	
 	@Column(name="fk_id_pais_portal")
-	private Integer idPaisPortal;
+	private String codigoPaisPortal;
 	
 	@ManyToOne
 	@JoinColumn(name="fk_id_canal_pago")
@@ -70,21 +70,21 @@ public class Negocio{
 	}
 	
 	public Negocio(Integer idUsuarioEjecutivo, Boolean recibirEmailContacto, Boolean fueraDelPais, String idUsuarioContactoEmailContacto, 
-			Integer idTipoNegocio, Integer idPaisPortal, String value_64_negocio_producto,
+			Integer idTipoNegocio, String codigoPaisPortal, String value_64_negocio_producto,
 			CanalPago idCanalPago) {
 		this.idUsuarioEjecutivo = idUsuarioEjecutivo;
 		this.recibirEmailContacto = recibirEmailContacto;
 		this.fueraDelPais = fueraDelPais;
 		this.idUsuarioContactoEmailContacto = idUsuarioContactoEmailContacto;
 		this.idTipoNegocio = idTipoNegocio;
-		this.idPaisPortal = idPaisPortal;
+		this.codigoPaisPortal = codigoPaisPortal;
 		this.value_64_negocio_producto = value_64_negocio_producto;
 		this.idCanalPago = idCanalPago;
 	}
 
 	public Negocio(String codigoNegocio, Integer idUsuarioEjecutivo,
 			Boolean recibirEmailContacto, Boolean fueraDelPais, Boolean proceso_Terminado, String idUsuarioContactoEmailContacto,
-			Integer idTipoNegocio, Integer idPaisPortal, String value_64_negocio_producto,
+			Integer idTipoNegocio, String codigoPaisPortal, String value_64_negocio_producto,
 			CanalPago idCanalPago) {
 		super();
 		this.codigoNegocio = codigoNegocio;
@@ -93,7 +93,7 @@ public class Negocio{
 		this.fueraDelPais = fueraDelPais;
 		this.idUsuarioContactoEmailContacto = idUsuarioContactoEmailContacto;
 		this.idTipoNegocio = idTipoNegocio;
-		this.idPaisPortal = idPaisPortal;
+		this.codigoPaisPortal = codigoPaisPortal;
 		this.value_64_negocio_producto = value_64_negocio_producto;
 		this.idCanalPago = idCanalPago;
 	}
@@ -169,13 +169,13 @@ public class Negocio{
 	public void setIdTipoNegocio(Integer idTipoNegocio) {
 		this.idTipoNegocio = idTipoNegocio;
 	}
-
-	public Integer getIdPaisPortal() {
-		return idPaisPortal;
+	
+	public String getCodigoPaisPortal() {
+		return codigoPaisPortal;
 	}
 
-	public void setIdPaisPortal(Integer idPaisPortal) {
-		this.idPaisPortal = idPaisPortal;
+	public void setCodigoPaisPortal(String codigoPaisPortal) {
+		this.codigoPaisPortal = codigoPaisPortal;
 	}
 
 	public CanalPago getIdCanalPago() {

@@ -407,14 +407,14 @@ public class VentaPagoController {
 
 	@GetMapping(value = "${url.app.servicio.listarNegocioxPaisPortalEntreFechas}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response>  listarNegocioxPaisPortalEntreFechas(HttpServletRequest request
-			,  @ApiParam(value = "objeto de entrada", required = true, defaultValue = "0") @PathVariable String idpaisportal
+			,  @ApiParam(value = "objeto de entrada", required = true, defaultValue = "0") @PathVariable String codigopaisportal
 			,  @ApiParam(value = "objeto de entrada", required = true, defaultValue = "0") @PathVariable String fechainicial
 			,  @ApiParam(value = "objeto de entrada", required = true, defaultValue = "0") @PathVariable String fechafinal)  throws LogicaImplException{
 
 		Instant start = Instant.now();
 
 		return new ResponseEntity<>(new Response(null,  HttpStatus.OK.value(),factoryVentaPagoService.listarNegocioxPaisPortalEntreFechas(
-				Integer.parseInt(idpaisportal), fechainicial, fechafinal), 
+				codigopaisportal, fechainicial, fechafinal), 
 				AppDate.generarTiempoDuracion(Duration.between(start, Instant.now())), 
 				request.getRequestURI()), HttpStatus.OK);
 

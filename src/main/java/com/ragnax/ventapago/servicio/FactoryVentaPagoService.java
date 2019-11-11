@@ -42,7 +42,7 @@ public interface FactoryVentaPagoService {
 	public VentaPago crearNegocio(Negocio objNegocio) throws LogicaImplException;
 	public VentaPago buscarNegocioxCodigo(Negocio objNegocio) throws LogicaImplException;
 	public VentaPago listarTodoNegocio() throws LogicaImplException;
-	public VentaPago listarNegocioxPaisPortalEntreFechas(Integer fkIdPaisPortal, String sFechaInicial, String sFechaFinal) throws LogicaImplException;
+	public VentaPago listarNegocioxPaisPortalEntreFechas(String codigoPaisPortal, String sFechaInicial, String sFechaFinal) throws LogicaImplException;
 	
 	public VentaPago crearStatusNegocio(StatusNegocio objStatusNegocio) throws LogicaImplException;
 	public VentaPago listarStatusNegocioxNegocio(StatusNegocio objStatusNegocio) throws LogicaImplException;
@@ -51,7 +51,7 @@ public interface FactoryVentaPagoService {
 	public VentaPago actualizarEstadoPago(Pago objPago) throws LogicaImplException;
 	public VentaPago buscarPagoxCodigoNegocio(Pago objPago) throws LogicaImplException;
 	public VentaPago listarTodoPago() throws LogicaImplException;
-	public VentaPago listarPagoEntreFecha(Integer fkIdPaisPortal, String sFechaInicial, String sFechaFinal) throws LogicaImplException;
+	public VentaPago listarPagoEntreFecha(String codigoPaisPortal, String sFechaInicial, String sFechaFinal) throws LogicaImplException;
 	
 	public VentaPago crearAjusteCantidadTotal(AjusteCantidadTotal objAjusteCantidadTotal) throws LogicaImplException;
 	public VentaPago buscarAjusteCantidadTotalxPagoxTipoMonedaXHTipoCambioxHFeeComision(AjusteCantidadTotal objAjusteCantidadTotal) throws LogicaImplException;
