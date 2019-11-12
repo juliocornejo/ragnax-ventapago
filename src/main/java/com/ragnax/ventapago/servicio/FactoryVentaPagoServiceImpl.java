@@ -52,11 +52,12 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 			Pageable pageByNombreDesc = PageRequest.of(0, 1, Sort.by("nombreCanalPago").descending());
 
 			Page<CanalPago> pageCodigoCanalPago  = factoryVentaPagoDAO.getCanalPagoRepository().findByNombreCanalPago(objCanalPago.getNombreCanalPago(), pageByNombreDesc); 
-
-			if(pageCodigoCanalPago.isEmpty()){
+			
+			if(pageCodigoCanalPago.isEmpty()) {
+				
 				Pageable pageByidDesc = PageRequest.of(0, 1, Sort.by("idCanalPago").descending());
 
-				Page<CanalPago> pageIdCanalPago = factoryVentaPagoDAO.getCanalPagoRepository().findAll(pageByidDesc);
+				Page<CanalPago> pageIdCanalPago =  factoryVentaPagoDAO.getCanalPagoRepository().findAll(pageByidDesc);
 
 				Integer idCanalPago = (!pageIdCanalPago.isEmpty()) ? (Integer) pageIdCanalPago.getContent().get(0).getIdCanalPago() + 1 : 1;
 
@@ -67,6 +68,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 				pageCodigoCanalPago  = factoryVentaPagoDAO.getCanalPagoRepository().findByNombreCanalPago(objCanalPago.getNombreCanalPago(), pageByNombreDesc);
 
 				ventaPago.setCanalPago(pageCodigoCanalPago.getContent().get(0));
+				
 			}else {
 				throw new LogicaImplException("No se puede crear CanalPago, parametros ya existen en identificador valido");
 			}
@@ -167,6 +169,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 			Page<TipoMedioPago> pageNombreTipoMedioPago  = factoryVentaPagoDAO.getTipoMedioPagoRepository().findByNombreTipoMedioPago(objTipoMedioPago.getNombreTipoMedioPago(), pageByNombreDesc); 
 
 			if(pageNombreTipoMedioPago.isEmpty()){
+				
 				Pageable pageByidDesc = PageRequest.of(0, 1, Sort.by("idTipoMedioPago").descending());
 
 				Page<TipoMedioPago> pageIdTipoMedioPago = factoryVentaPagoDAO.getTipoMedioPagoRepository().findAll(pageByidDesc);
@@ -281,6 +284,7 @@ public class FactoryVentaPagoServiceImpl implements FactoryVentaPagoService {
 			Page<TipoStatusNegocio> pageNombreTipoStatusNegocio  = factoryVentaPagoDAO.getTipoStatusNegocioRepository().findByNombreTipoStatusNegocio(objTipoStatusNegocio.getNombreTipoStatusNegocio(), pageByNombreDesc); 
 
 			if(pageNombreTipoStatusNegocio.isEmpty()){
+				
 				Pageable pageByidDesc = PageRequest.of(0, 1, Sort.by("idTipoStatusNegocio").descending());
 
 				Page<TipoStatusNegocio> pageIdTipoStatusNegocio = factoryVentaPagoDAO.getTipoStatusNegocioRepository().findAll(pageByidDesc);
