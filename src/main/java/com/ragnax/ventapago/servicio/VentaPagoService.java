@@ -13,10 +13,10 @@ import com.ragnax.ventapago.entidad.TipoMedioPago;
 import com.ragnax.ventapago.entidad.TipoStatusNegocio;
 import com.ragnax.ventapago.exception.LogicaImplException;
 
-public interface FactoryVentaPagoService {
+public interface VentaPagoService {
 	/******Se Puede buscar por el Id****/
-	public VentaPago crearCanalPago(CanalPago objCanalPago) throws LogicaImplException;
 	public VentaPago actualizarCanalPago(Integer id, CanalPago objCanalPago) throws LogicaImplException;
+	public VentaPago crearCanalPago(CanalPago objCanalPago) throws LogicaImplException;
 	public VentaPago buscarCanalPago(CanalPago objCanalPago) throws LogicaImplException;
 	public VentaPago listarTodoCanalPago() throws LogicaImplException;
 	

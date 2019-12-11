@@ -3,8 +3,6 @@ package com.ragnax.ventapago.controller.response;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.ragnax.ventapago.entidad.AjusteCantidadTotal;
 import com.ragnax.ventapago.entidad.AutorizacionPago;
 import com.ragnax.ventapago.entidad.CanalPago;
@@ -17,7 +15,6 @@ import com.ragnax.ventapago.entidad.StatusNegocio;
 import com.ragnax.ventapago.entidad.TipoMedioPago;
 import com.ragnax.ventapago.entidad.TipoStatusNegocio;
 
-@XmlRootElement(name="ventaPago")
 public class VentaPago implements Serializable{
 
 	private static final long serialVersionUID = -4301293450469130528L;

@@ -1,6 +1,8 @@
 package com.ragnax.ventapago;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -21,17 +23,14 @@ import com.ragnax.ventapago.entidad.StatusNegocio;
 import com.ragnax.ventapago.entidad.TipoMedioPago;
 import com.ragnax.ventapago.entidad.TipoStatusNegocio;
 import com.ragnax.ventapago.exception.LogicaImplException;
-import com.ragnax.ventapago.servicio.FactoryVentaPagoService;
-
-import vijnana.utilidades.component.utilidades.AppDate;
-import vijnana.utilidades.component.utilidades.TipoFormatoFecha;
+import com.ragnax.ventapago.servicio.VentaPagoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RagnaxVentapagoApplication.class)
 public class CrearDataVentaPagoTests {
 	
 	@Autowired
-    private FactoryVentaPagoService factoryVentaPagoService;
+    private VentaPagoService factoryVentaPagoService;
 	
 	@Test
 	public void crearVentaPagoEntities() throws LogicaImplException {
@@ -181,16 +180,27 @@ public class CrearDataVentaPagoTests {
 
 			List<Negocio> listaNegocio = factoryVentaPagoService.listarTodoNegocio().getListaNegocio();
 			System.out.println(listaNegocio);
-
-			Date fechaInicial = AppDate.crearDateConFormatYYYY_MM_DDTHH_MM_SS(2019, 10, 1, 0, 0, 1);
-			Date fechaFinal = AppDate.crearDateConFormatYYYY_MM_DDTHH_MM_SS(2019, 12, 31, 0, 0, 1);
-
-			String sfechaInicial = AppDate.obtenerFechaEnFormato(fechaInicial, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
-			String sfechaFinal = AppDate.obtenerFechaEnFormato(fechaFinal, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
-
-			listaNegocio = factoryVentaPagoService.listarNegocioxPaisPortalEntreFechas("cl", sfechaInicial, sfechaFinal).getListaNegocio();
-			System.out.println(listaNegocio);
-
+			
+			try {
+				Date fechaInicial = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-31 12:56:11");
+				Date fechaFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-12-05 11:09:37");
+				
+				String strFormatoFechaYYYY_MM_ddTHH_MM_SSZ =  "yyyy-MM-dd'T'HH:mm:ss'Z'";
+				SimpleDateFormat formatoFecha_YYYY_MM_DDTHHmmss = new SimpleDateFormat(strFormatoFechaYYYY_MM_ddTHH_MM_SSZ);
+				
+				System.out.println(fechaInicial);
+				System.out.println(fechaFinal);
+				
+				listaNegocio = factoryVentaPagoService.listarNegocioxPaisPortalEntreFechas("cl", 
+						formatoFecha_YYYY_MM_DDTHHmmss.format(fechaInicial), 
+						formatoFecha_YYYY_MM_DDTHHmmss.format(fechaFinal)).getListaNegocio();
+				System.out.println(listaNegocio);
+			
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}catch(Exception e) {
 
 		}
@@ -230,14 +240,25 @@ public class CrearDataVentaPagoTests {
 		Pago busPago = factoryVentaPagoService.buscarPagoxCodigoNegocio(new Pago(listaNegocio.get(0))).getPago();
 		System.out.println(busPago);
 		
-		Date fechaInicial = AppDate.crearDateConFormatYYYY_MM_DDTHH_MM_SS(2019, 10, 1, 0, 0, 1);
-		Date fechaFinal = AppDate.crearDateConFormatYYYY_MM_DDTHH_MM_SS(2019, 12, 31, 0, 0, 1);
-
-		String sfechaInicial = AppDate.obtenerFechaEnFormato(fechaInicial, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
-		String sfechaFinal = AppDate.obtenerFechaEnFormato(fechaFinal, TipoFormatoFecha.YYYY_MM_ddTHH_MM_SSZ);
+		try {
+			Date fechaInicial = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-31 12:56:11");
+			Date fechaFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-12-05 11:09:37");
+			
+			String strFormatoFechaYYYY_MM_ddTHH_MM_SSZ =  "yyyy-MM-dd'T'HH:mm:ss'Z'";
+			SimpleDateFormat formatoFecha_YYYY_MM_DDTHHmmss = new SimpleDateFormat(strFormatoFechaYYYY_MM_ddTHH_MM_SSZ);
+			
+			System.out.println(fechaInicial);
+			System.out.println(fechaFinal);
+			
+			List<Pago> listaPago = factoryVentaPagoService.listarPagoEntreFecha(listaNegocio.get(0).getCodigoPaisPortal(), formatoFecha_YYYY_MM_DDTHHmmss.format(fechaInicial), formatoFecha_YYYY_MM_DDTHHmmss.format(fechaFinal)).getListaPago();
+			System.out.println(listaPago);
 		
-		List<Pago> listaPago = factoryVentaPagoService.listarPagoEntreFecha(listaNegocio.get(0).getCodigoPaisPortal(), sfechaInicial, sfechaFinal).getListaPago();
-		System.out.println(listaPago);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 
 	}catch(Exception e) {
 

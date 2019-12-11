@@ -15,7 +15,7 @@ public interface NegocioRepository extends JpaRepository<Negocio, Integer> {
 	@Query("select n from Negocio n where n.codigoNegocio = :codigoNegocio")
 	Page<Negocio> findByCodigoNegocio(String codigoNegocio, Pageable page);
 	
-	List<Negocio> findAllByIdPaisPortalAndFechaNegocioBetween(String codigoPaisPortal, Timestamp limiteInicialFechaNegocio, Timestamp limiteFinalFechaFechaNegocio);
+	List<Negocio> findAllByCodigoPaisPortalAndFechaNegocioBetween(String codigoPaisPortal, Timestamp limiteInicialFechaNegocio, Timestamp limiteFinalFechaFechaNegocio);
 	
 	
 }

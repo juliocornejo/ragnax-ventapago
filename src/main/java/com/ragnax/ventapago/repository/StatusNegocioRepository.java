@@ -9,11 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.ragnax.ventapago.entidad.Negocio;
 import com.ragnax.ventapago.entidad.StatusNegocio;
-import com.ragnax.ventapago.entidad.TipoStatusNegocio;
 
 public interface StatusNegocioRepository extends JpaRepository<StatusNegocio, Integer> {
-	
-//	StatusNegocio findByIdTipoStatusNegocioAndIdNegocio(TipoStatusNegocio idTipoStatusNegocio, Negocio idNegocio);
 	
 	List<StatusNegocio> findByIdNegocio(Negocio idNegocio);
 	

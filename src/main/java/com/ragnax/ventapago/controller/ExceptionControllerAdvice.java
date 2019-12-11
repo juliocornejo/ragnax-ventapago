@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.ragnax.ventapago.controller.response.Response;
+import com.ragnax.ventapago.controller.response.RagnaxError;
 import com.ragnax.ventapago.exception.LogicaImplException;
 
-import vijnana.respuesta.wrapper.response.AbstractWrapperError;
 
 /**
  * Created by julito el mas lindo on 09-08-19.
@@ -30,10 +29,15 @@ public class ExceptionControllerAdvice {
      * @param mailEx excepcion del tipo MailException.
      * @return ResponseEntity<Response> con el error capturado y el codigo HTTP
      */
-    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
     @ExceptionHandler(LogicaImplException.class)
-    public ResponseEntity<Response> handlerException(LogicaImplException e) {
-        LOGGER.error("Error en feecomision: {} .", e.getMessage());
-        return new ResponseEntity<>(new Response(new AbstractWrapperError(e.getMessage()),  HttpStatus.SERVICE_UNAVAILABLE.value(), null, null, null), HttpStatus.SERVICE_UNAVAILABLE);
+    public ResponseEntity<RagnaxError> handlerException(LogicaImplException lie) {
+        LOGGER.error("Error en politicacomercial: {} .", lie.getMessage());
+//        return new ResponseEntity<>(new Response(e.getMessage(),null, HttpStatus.INTERNAL_SERVER_ERROR.value(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+//        return new ResponseEntity<>(new PoliticaComercialError(new PoliticaComercialError(e.getMessage()),  HttpStatus.SERVICE_UNAVAILABLE.value(), null, null, null), HttpStatus.SERVICE_UNAVAILABLE);
+        
+        return new ResponseEntity<>(new RagnaxError(HttpStatus.ACCEPTED.value(), lie.getMessage()),
+                HttpStatus.ACCEPTED);
+        
     }
 }
